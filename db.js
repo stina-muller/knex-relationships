@@ -14,5 +14,8 @@ function getUsers (testConn) {
 
 function getUser (id, testConn) {
   const conn = testConn || connection
-  return conn('users').where('id', id)
+  return conn('users')
+    .join('profiles', 'users.id', 'profiles.user_id')
+    .where('users.id', id)
+    .select('users.id', 'users.name', 'profiles.url', 'profiles.gender')
 }

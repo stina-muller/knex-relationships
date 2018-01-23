@@ -14,5 +14,20 @@ router.get('/', (req, res) => {
     })
 })
 
-module.exports = router
+router.get('/profiles/:id', (req, res) => {
+  const target = req.params.id
+  db.getUser(target)
+    .then(user => {
+      console.log(user[0])
+      res.render('profiles', user[0])
+    })
+    .catch(err => {
+      res.status(500).send('DATABASE ERROR: ' + err.message)
+    })
+})
 
+router.get('/add-user', (req, res) => {
+  res.render('add-user')
+})
+
+module.exports = router
