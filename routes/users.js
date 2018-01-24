@@ -9,9 +9,7 @@ router.get('/', (req, res) => {
     .then(users => {
       res.render('index', { users: users })
     })
-    .catch(err => {
-      res.status(500).send('DATABASE ERROR: ' + err.message)
-    })
+    .catch(err => showError(err, res))
 })
 
 router.get('/profiles/:id', (req, res) => {
@@ -21,9 +19,7 @@ router.get('/profiles/:id', (req, res) => {
       console.log(user[0])
       res.render('profiles', user[0])
     })
-    .catch(err => {
-      res.status(500).send('DATABASE ERROR: ' + err.message)
-    })
+    .catch(err => showError(err, res))
 })
 
 router.get('/add-user', (req, res) => {
@@ -33,6 +29,20 @@ router.get('/add-user', (req, res) => {
 router.post('/add-user', (req, res) => {
   const newUser = req.body
   db.addUser(newUser)
+    .then(() => {
+      res.redirect('/')
+    })
+    .catch(err => showError(err, res))
+})
+
+router.get('/addblog/:id', (req, res) => {
+  // const id = req.params.id
+  res.render('add-blog-page')
+})
+
+router.post('/addblog', (req, res) => {
+  const addBlog = req.body
+  db.addBlog(addBlog)
     .then(() => {
       res.redirect('/')
     })
